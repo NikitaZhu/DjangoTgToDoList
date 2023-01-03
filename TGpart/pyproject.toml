@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "tgpart"
+version = "0.1.0"
+description = ""
+authors = ["nikitazucko <norel.prod@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^2.24"
+requests = "^2.28.1"
+aiogram-calendar = "^0.1.1"
+python-dotenv = "^0.21.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
