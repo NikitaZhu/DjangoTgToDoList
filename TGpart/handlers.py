@@ -13,7 +13,6 @@ from states.states import CreateEvent
 from aiogram_calendar import simple_cal_callback, SimpleCalendar
 
 
-
 @dp.message_handler(commands=['start'])
 async def cmd_start(msg: types.Message):
     user = msg.from_user
@@ -74,7 +73,8 @@ async def desc_state(msg: types.Message, state: FSMContext):
 async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict, state: FSMContext):
     selected, date = await SimpleCalendar().process_selection(callback_query, callback_data)
     if selected:
-        await state.update_data(chose_date=date)
+        a = date.strftime('%Y-%m-%d')
+        await state.update_data(chose_date=a)
         data = await state.get_data()
         await state.finish()
         await callback_query.message.answer(text=f"Событие создано:\n"
@@ -82,6 +82,16 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
                                                  f"Описание: {data['description']}\n"
                                                  f"Дата: {data['chose_date']}",
                                             reply_markup=StartKb())
+
+        response = requests.post(f"http://localhost:8000/events/", json=data)
+        response.raise_for_status()
+        return response.json()
+
+    # event = callback_query.from_user
+    # dita = dict(title=data['title'], description=data['description'], chose_date=data['chose_date'])
+    # res = requests.post('http://127.0.0.1:8000/events/', data=dita)
+    # return res.json()
+
 
 
 @dp.message_handler(Text(equals='Показать уже созданные события'))
