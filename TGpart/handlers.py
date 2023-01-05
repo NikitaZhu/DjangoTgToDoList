@@ -6,11 +6,13 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.types import CallbackQuery
 
+import services.EventToDo
 from Keyboards.ClientKb import StartKb, cancel_button
 from aiogram.contrib.fsm_storage import memory
 from app import bot, dp, types
 from states.states import CreateEvent
 from aiogram_calendar import simple_cal_callback, SimpleCalendar
+from services import EventToDo
 
 
 @dp.message_handler(commands=['start'])
@@ -19,6 +21,7 @@ async def cmd_start(msg: types.Message):
     data = dict(username=user.username, telegram_id=user.id, full_name=user.full_name)
     res = requests.post("http://127.0.0.1:8000/users/", data=data)
     res.json()
+
 
     await bot.send_sticker(sticker='CAACAgIAAxkBAAEG9kFjpYem9AABYNWO9Ts1qFDXvqhTpRsAAkIQAAIzxSlJkA7UEacqSoIsBA',
                            chat_id=msg.chat.id)
@@ -42,7 +45,7 @@ async def cancel_cmd(message: types.Message, state: FSMContext):
 @dp.message_handler(Text(equals='Описание', ignore_case=True))
 async def desc_cmd(msg: types.Message):
     await bot.send_message(chat_id=msg.chat.id,
-                           text='Данный бот умеет планировать ваши задачи и напоминать о них')
+                           text=msg.from_user.id)
 
 
 @dp.message_handler(Text(equals='Создать событие'))
@@ -76,6 +79,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
         a = date.strftime('%Y-%m-%d')
         await state.update_data(chose_date=a)
         data = await state.get_data()
+        data['user'] = callback_query.from_user.id
         await state.finish()
         await callback_query.message.answer(text=f"Событие создано:\n"
                                                  f"Название: {data['title']}\n"
@@ -86,12 +90,6 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
         response = requests.post(f"http://localhost:8000/events/", json=data)
         response.raise_for_status()
         return response.json()
-
-    # event = callback_query.from_user
-    # dita = dict(title=data['title'], description=data['description'], chose_date=data['chose_date'])
-    # res = requests.post('http://127.0.0.1:8000/events/', data=dita)
-    # return res.json()
-
 
 
 @dp.message_handler(Text(equals='Показать уже созданные события'))
