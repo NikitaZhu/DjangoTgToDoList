@@ -6,6 +6,7 @@ class CreateEvent(StatesGroup):
     description = State()
     date = State()
 
+
 class EventState(StatesGroup):
     event = State()
-    ticket = State()
+    title = State()

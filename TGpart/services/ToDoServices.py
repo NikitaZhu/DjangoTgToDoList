@@ -7,7 +7,7 @@ class ToDoService:
 
     def get_events(self, page):
         query_params = dict(limit=self.limit, offset=(page - 1) * self.limit)
-        response = requests.get(f"{self.base_url}eventsuser/", params=query_params)
+        response = requests.get(f"{self.base_url}events/", params=query_params)
         response.raise_for_status()
         return response.json()
 
