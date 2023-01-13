@@ -10,16 +10,17 @@ from services.ToDoServices import todo_service
 from states.states import CreateEvent, EventState
 
 
-async def create_event_cmd(msg: types.Message, state: FSMContext):
+async def create_event_cmd(callback: CallbackQuery, state: FSMContext):
     #  Начало стэйта и объявления названия события
     await CreateEvent.title.set()
-    query_params = dict(telegram_id=msg.from_user.id)
+    query_params = dict(telegram_id=callback.from_user.id)
     data = await state.get_data()
     # pprint(data)
     response = requests.get(f"http://127.0.0.1:8000/telegram_id/", params=query_params)
     await state.update_data(id=response.json()[0]['id'])
-    await msg.answer(text='Введите название события',
-                     reply_markup=cancel_button())
+    await callback.message.answer(text='Введите название события',
+                                  reply_markup=cancel_button())
+    await callback.message.delete()
 
 
 async def title_state(msg: types.Message, state: FSMContext):
@@ -82,7 +83,7 @@ async def display_events(callback: CallbackQuery):
     if response["next"]:
         pagination_buttons.append(types.InlineKeyboardButton("➡️", callback_data=f"get_events_{page + 1}"))
 
-    rkb.row(*pagination_buttons).row(types.InlineKeyboardButton("Return", callback_data="return"))
+    rkb.row(*pagination_buttons).row(types.InlineKeyboardButton("Вернуться", callback_data='Return', ignore_case=True))
 
     await callback.message.edit_text("Выберите событие", reply_markup=rkb)
 
@@ -96,7 +97,7 @@ async def display_event(callback: types.CallbackQuery, state: FSMContext):
 
     inline_kb = types.InlineKeyboardMarkup(row_width=1)
     inline_kb.add(types.InlineKeyboardButton("Изменить событие", callback_data="change_event"))
-    inline_kb.add(types.InlineKeyboardButton("Вернуться", callback_data="return"))
+    inline_kb.add(types.InlineKeyboardButton("Вернуться", callback_data="Return"))
     #  Отображение всей информации о событии с возможностью изменения его
     await callback.message.edit_text(f'Название: {response["title"]}\n'
                                      f'Описание: {response["description"]}\n'
@@ -109,7 +110,7 @@ async def display_event(callback: types.CallbackQuery, state: FSMContext):
 
 def setup(dp: Dispatcher):
     #  Регистрация хэндлеров
-    dp.register_message_handler(create_event_cmd, Text(equals='Создать событие'))
+    dp.register_callback_query_handler(create_event_cmd, Text(equals='create_event'))
     dp.register_message_handler(title_state, state=CreateEvent.title)
     dp.register_message_handler(desc_state, state=CreateEvent.description)
     dp.register_callback_query_handler(process_simple_calendar, simple_cal_callback.filter(),

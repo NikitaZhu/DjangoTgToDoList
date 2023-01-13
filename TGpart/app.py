@@ -25,6 +25,7 @@ async def sent_to_admin(dp):
 
 if __name__ == "__main__":
     from handlers import dp
+
     event_handler_setup(dp)
 
     executor.start_polling(dp, skip_updates=True, on_startup=sent_to_admin)

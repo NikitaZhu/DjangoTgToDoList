@@ -25,28 +25,30 @@ async def cmd_start(msg: types.Message):
 
     await bot.send_sticker(sticker='CAACAgIAAxkBAAEG9kFjpYem9AABYNWO9Ts1qFDXvqhTpRsAAkIQAAIzxSlJkA7UEacqSoIsBA',
                            chat_id=msg.chat.id)
-    await msg.answer(text='Выбери действие',
-                     reply_markup=show_events())
+    await bot.send_message(chat_id=msg.chat.id,
+                           text='Выбери действие 🎲',
+                           reply_markup=StartKb())
+    await msg.delete()
 
 
-@dp.message_handler(state='*', commands='cancel')
-@dp.message_handler(Text(equals='Вернуться в главное меню', ignore_case=True), state='*')
-async def cancel_cmd(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(Text(equals='Return', ignore_case=True), state='*')
+async def cancel_cmd(callback: CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
         return
 
     await state.finish()
 
-    await message.reply('Действие отменено', reply_markup=StartKb())
-    await message.delete()
+    await callback.bot.send_message(chat_id=callback.message.chat.id,
+                                    text='Действие отменено',
+                                    reply_markup=StartKb())
+    await callback.message.delete()
 
 
 @dp.message_handler(Text(equals='Описание', ignore_case=True))
 async def desc_cmd(msg: types.Message):
     await bot.send_message(chat_id=msg.chat.id,
                            text=msg.from_user.id)
-
 
 # @dp.message_handler(Text(equals='Создать событие'))
 # async def create_event_cmd(msg: types.Message, state: FSMContext):
@@ -141,4 +143,3 @@ async def desc_cmd(msg: types.Message):
 #                                      f'Дата события: {response["chose_date"]}',
 #                                      reply_markup=inline_kb)
 #     await callback.answer("User fetched")
-

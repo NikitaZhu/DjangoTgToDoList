@@ -1,19 +1,19 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 
-def StartKb() -> ReplyKeyboardMarkup:
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb1 = KeyboardButton('Создать событие')
-    kb3 = KeyboardButton('Показать')
-    kb4 = KeyboardButton('Изменить события')
-    kb5 = KeyboardButton('Вопросы и пожелания')
-    kb6 = KeyboardButton('Описание')
-    return kb.row(kb1).row(kb3).row(kb4).row(kb5, kb6)
+def StartKb() -> InlineKeyboardButton:
+    kb = InlineKeyboardMarkup(row_width=1)
+    kb1 = InlineKeyboardButton('Создать событие', callback_data='create_event')
+    kb3 = InlineKeyboardButton(text='Показать уже созданные', callback_data='get_events_1')
+    kb4 = InlineKeyboardButton('Изменить события', callback_data='vfkwcjbk')
+    kb5 = InlineKeyboardButton('Вопросы и пожелания', callback_data='lvjcfblk')
+    kb6 = InlineKeyboardButton('Описание', callback_data='ckjwefrbn')
+    return kb.add(kb1, kb3, kb6, kb5, kb4)
 
 
-def cancel_button() -> ReplyKeyboardMarkup:
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb1 = KeyboardButton('Вернуться в главное меню')
+def cancel_button() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardMarkup(resize_keyboard=True)
+    kb1 = InlineKeyboardButton('Отмена', callback_data='Return')
     return kb.add(kb1)
 
 
