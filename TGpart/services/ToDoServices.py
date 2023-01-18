@@ -33,4 +33,11 @@ class ToDoService:
         response.raise_for_status()
         return response.json()
 
+    def get_questions(self, page):
+        query_params = dict(limit=self.limit, offset=(page - 1) * self.limit)
+        response = requests.get(f'{self.base_url}questions/', params=query_params)
+        response.raise_for_status()
+        return response.json()
+
+
 todo_service = ToDoService()

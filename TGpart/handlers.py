@@ -1,19 +1,11 @@
-import datetime
-from pprint import pprint
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-
-import aiogram_calendar.dialog_calendar
 import requests
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.types import CallbackQuery
-from requests import Response
-from services.ToDoServices import todo_service
-from Keyboards.ClientKb import StartKb, cancel_button, show_events
-from aiogram.contrib.fsm_storage import memory
+
+from Keyboards.adminkb import start_admin_kb
+from Keyboards.ClientKb import StartKb
 from app import bot, dp, types
-from states.states import CreateEvent
-from aiogram_calendar import simple_cal_callback, SimpleCalendar
 
 
 @dp.message_handler(commands=['start'])
@@ -47,12 +39,16 @@ async def cancel_cmd(callback: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(Text(equals='cancel', ignore_case=True))
 async def return_cmd(callback: CallbackQuery):
-    await callback.message.answer(text='Выбери действие 🎲',
-                                  reply_markup=StartKb())
-    await callback.message.delete()
+    await callback.message.edit_text(text='Выбери действие 🎲',
+                                     reply_markup=StartKb())
 
 
-@dp.message_handler(Text(equals='Описание', ignore_case=True))
-async def desc_cmd(msg: types.Message):
-    await bot.send_message(chat_id=msg.chat.id,
-                           text=msg.from_user.id)
+@dp.callback_query_handler(Text(equals='exit', ignore_case=True))
+async def admin_cancel(callback: CallbackQuery):
+    await callback.message.edit_text(text='Вы зашли в админку',
+                                     reply_markup=start_admin_kb())
+
+
+@dp.callback_query_handler(Text(equals='descc', ignore_case=True))
+async def desc_cmd(callback: CallbackQuery):
+    await callback.message.answer(callback.from_user.id)
