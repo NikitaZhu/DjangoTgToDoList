@@ -11,10 +11,26 @@ class ToDoService:
         response.raise_for_status()
         return response.json()
 
+    def get_my_events(self, events_data):
+        query_params = dict(limit=self.limit, offset=(events_data['page'] - 1) * self.limit, user=events_data['user'])
+        response = requests.get(f"{self.base_url}events/", params=query_params)
+        response.raise_for_status()
+        return response.json()
+
     def get_event(self, event_id: int) -> None:
         response = requests.get(f"{self.base_url}events/{event_id}/")
         response.raise_for_status()
         return response.json()
 
+    def patch_event(self, event_data):
+        response = requests.patch(f'{self.base_url}events/{event_data["id"]}/', json=event_data)
+        response.raise_for_status()
+        return response.json()
+
+    def get_users(self, page):
+        query_params = dict(limit=self.limit, offset=(page - 1) * self.limit)
+        response = requests.get(f'{self.base_url}users/', params=query_params)
+        response.raise_for_status()
+        return response.json()
 
 todo_service = ToDoService()

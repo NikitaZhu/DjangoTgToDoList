@@ -7,6 +7,8 @@ class CreateEvent(StatesGroup):
     date = State()
 
 
-class EventState(StatesGroup):
+class ChangeEvent(StatesGroup):
     event = State()
     title = State()
+    description = State()
+    date = State()

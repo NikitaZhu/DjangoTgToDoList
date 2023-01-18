@@ -5,6 +5,7 @@ from config import BOT_TOKEN, admin_id
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from dotenv import load_dotenv
 from handlerss.events import setup as event_handler_setup
+from adminpanel.admin import setup as admin_handler_setup
 
 storage = MemoryStorage()
 
@@ -27,5 +28,6 @@ if __name__ == "__main__":
     from handlers import dp
 
     event_handler_setup(dp)
+    admin_handler_setup(dp)
 
     executor.start_polling(dp, skip_updates=True, on_startup=sent_to_admin)
