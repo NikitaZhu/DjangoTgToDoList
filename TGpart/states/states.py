@@ -12,3 +12,8 @@ class ChangeEvent(StatesGroup):
     title = State()
     description = State()
     date = State()
+
+
+class CreateWish(StatesGroup):
+    desc = State()
+    wish = State()

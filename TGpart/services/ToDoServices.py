@@ -22,6 +22,11 @@ class ToDoService:
         response.raise_for_status()
         return response.json()
 
+    def del_event(self, event_id):
+        response = requests.delete(f'{self.base_url}events/{event_id}/')
+        response.raise_for_status()
+        return response.raise_for_status()
+
     def patch_event(self, event_data):
         response = requests.patch(f'{self.base_url}events/{event_data["id"]}/', json=event_data)
         response.raise_for_status()
@@ -30,6 +35,16 @@ class ToDoService:
     def get_users(self, page):
         query_params = dict(limit=self.limit, offset=(page - 1) * self.limit)
         response = requests.get(f'{self.base_url}users/', params=query_params)
+        response.raise_for_status()
+        return response.json()
+
+    def get_user(self, users_id: int) -> None:
+        response = requests.get(f"{self.base_url}users/{users_id}/")
+        response.raise_for_status()
+        return response.json()
+
+    def get_wish(self, wish_id: int) -> None:
+        response = requests.get(f'{self.base_url}questions/{wish_id}/')
         response.raise_for_status()
         return response.json()
 
