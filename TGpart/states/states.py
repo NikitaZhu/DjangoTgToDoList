@@ -17,3 +17,8 @@ class ChangeEvent(StatesGroup):
 class CreateWish(StatesGroup):
     desc = State()
     wish = State()
+
+
+class Groups(StatesGroup):
+    title = State()
+    description = State()

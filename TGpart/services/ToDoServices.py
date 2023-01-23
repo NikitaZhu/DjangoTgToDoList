@@ -54,5 +54,16 @@ class ToDoService:
         response.raise_for_status()
         return response.json()
 
+    def get_groups(self, page):
+        query_params = dict(limit=self.limit, offset=(page - 1) * self.limit)
+        response = requests.get(f'{self.base_url}groups/', params=query_params)
+        response.raise_for_status()
+        return response.json()
+
+    def get_group(self, group_id: int):
+        response = requests.get(f'{self.base_url}groups/{group_id}/')
+        response.raise_for_status()
+        return response.json()
+
 
 todo_service = ToDoService()

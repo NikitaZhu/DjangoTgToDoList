@@ -18,7 +18,7 @@ async def cmd_start(msg: types.Message):
     await bot.send_sticker(sticker='CAACAgIAAxkBAAEG9kFjpYem9AABYNWO9Ts1qFDXvqhTpRsAAkIQAAIzxSlJkA7UEacqSoIsBA',
                            chat_id=msg.chat.id)
     await bot.send_message(chat_id=msg.chat.id,
-                           text='Выбери действие 🎲',
+                           text='<b>Выбери действие</b> 🎲',
                            reply_markup=StartKb())
     await msg.delete()
 
@@ -32,14 +32,14 @@ async def cancel_cmd(callback: CallbackQuery, state: FSMContext):
     await state.finish()
 
     await callback.bot.send_message(chat_id=callback.message.chat.id,
-                                    text='Выбери действие 🎲',
+                                    text='<b>Выбери действие</b> 🎲',
                                     reply_markup=StartKb())
     await callback.message.delete()
 
 
 @dp.callback_query_handler(Text(equals='cancel', ignore_case=True))
 async def return_cmd(callback: CallbackQuery):
-    await callback.message.edit_text(text='Выбери действие 🎲',
+    await callback.message.edit_text(text='<b>Выбери действие</b> 🎲',
                                      reply_markup=StartKb())
 
 
@@ -51,4 +51,4 @@ async def admin_cancel(callback: CallbackQuery):
 
 @dp.callback_query_handler(Text(equals='descc', ignore_case=True))
 async def desc_cmd(callback: CallbackQuery):
-    await callback.message.answer(callback.from_user.id)
+    await callback.message.answer('Этот бот умеет создавать и хранить ваши запланированные события.')

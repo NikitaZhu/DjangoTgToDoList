@@ -124,7 +124,7 @@ async def display_event(callback: types.CallbackQuery, state: FSMContext):
         s += f'Никнэйм: @{response_user.json()["username"]}'
 
     await callback.message.edit_text(s, reply_markup=inline_kb)
-    await callback.answer("User fetched")
+    await callback.answer("Event fetched")
 
 
 async def delete_event(callback: CallbackQuery):
