@@ -5,6 +5,7 @@ def groupkb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardMarkup(row_width=1)
     kb1 = InlineKeyboardButton(text='Создать группу', callback_data='create_group')
     kb2 = InlineKeyboardButton(text='Посмотреть группы', callback_data='show_group_1')
+    kb3 = InlineKeyboardButton(text='Мои заявки',  callback_data='invitations')
     kb3 = InlineKeyboardButton(text='Вернуться', callback_data='cancel')
     return kb.add(kb1, kb2, kb3)
 

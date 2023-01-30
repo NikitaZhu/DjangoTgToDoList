@@ -4,11 +4,12 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 def StartKb() -> InlineKeyboardButton:
     kb = InlineKeyboardMarkup(row_width=1)
     kb1 = InlineKeyboardButton('🎆  Создать событие', callback_data='create_event')
-    kb3 = InlineKeyboardButton(text='✨  Показать уже созданные', callback_data='show_my_events_1')
+    kb3 = InlineKeyboardButton('✨  Показать уже созданные', callback_data='show_my_events_1')
     kb5 = InlineKeyboardButton('❔  Вопросы и пожелания', callback_data='pop_a_question')
+    kb2 = InlineKeyboardButton('💌  Настроить напоминание', callback_data='set_notifications')
     kb6 = InlineKeyboardButton('🤖  Описание', callback_data='descc')
     kb7 = InlineKeyboardButton('🥳  Группы(в разработке)', callback_data='chose_action_group')
-    return kb.add(kb1, kb3, kb6, kb5, kb7)
+    return kb.add(kb1, kb3, kb5, kb2, kb6, kb7)
 
 
 def cancel_button() -> InlineKeyboardMarkup:

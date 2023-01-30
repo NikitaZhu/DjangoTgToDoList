@@ -188,8 +188,8 @@ async def patch_event(msg: types.Message, state: FSMContext):
         date = msg.text
         result = re.match(r'[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])', date)
         if bool(result) == True:
-            event_data = {'id': get_data['event_id'], 'chose_date': date}
-            response = todo_service.patch_event(event_data)
+            # event_data = {'id': get_data['event_id'], 'chose_date': date}
+            # response = todo_service.patch_event(event_data)
             await state.finish()
             await msg.answer(text='Дата изменена. Что делаем дальше?',
                              reply_markup=change_kb())

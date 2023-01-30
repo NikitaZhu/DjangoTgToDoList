@@ -65,5 +65,20 @@ class ToDoService:
         response.raise_for_status()
         return response.json()
 
+    def get_notifications(self, page):
+        query_params = dict(limit=self.limit, offset=(page-1) * self.limit)
+        response = requests.get(f'{self.base_url}notifications/', params=query_params)
+        response.raise_for_status()
+        return response.json()
+
+    def get_notification(self, notice_id: int):
+        response = requests.get(f'{self.base_url}notifications/{notice_id}')
+        response.raise_for_status()
+        return response.json()
+
+    def get_notification_cron(self):
+        response = requests.get(f'{self.base_url}notifications/')
+        response.raise_for_status()
+        return response.json()
 
 todo_service = ToDoService()

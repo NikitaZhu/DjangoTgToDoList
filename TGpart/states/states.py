@@ -22,3 +22,7 @@ class CreateWish(StatesGroup):
 class Groups(StatesGroup):
     title = State()
     description = State()
+
+
+class Notifications(StatesGroup):
+    description = State()

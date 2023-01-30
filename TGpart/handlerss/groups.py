@@ -1,4 +1,9 @@
+from pprint import pprint
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 from Keyboards.Groupskb import groupkb, return_cmd_btn, invite, show_actions
+
 from config import BOT_TOKEN
 from services.ToDoServices import todo_service
 import requests
@@ -6,7 +11,6 @@ from aiogram import types, Dispatcher, Bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.types import CallbackQuery
-
 from states.states import Groups
 
 bot = Bot(BOT_TOKEN, parse_mode="HTML")
@@ -98,13 +102,14 @@ async def display_group(callback: CallbackQuery):
     group_id = int(callback.data.split(':')[-1])
     response = todo_service.get_group(group_id)
 
-    await callback.message.answer(f'<b>Название: </b>{response["title"]}\n'
-                                  f'<b>Описание: </b>{response["description"]}\n'
-                                  f'<b>Пользователи: </b>{response["user"]}',
-                                  reply_markup=show_actions())
+    await callback.message.edit_text(f'<b>Название: </b>{response["title"]}\n'
+                                     f'<b>Описание: </b>{response["description"]}\n'
+                                     f'<b>Пользователи: </b>{response["user"]}',
+                                     reply_markup=show_actions())
 
 
 def setup(dp: Dispatcher):
+    # dp.register_message_handler(test, Text(equals='test'))
     dp.register_callback_query_handler(chose_group, Text(equals='chose_action_group'))
     dp.register_callback_query_handler(cancel_cmd_group, Text(equals='group_return', ignore_case=True), state='*')
     dp.register_callback_query_handler(create_group, Text(equals='create_group'))
